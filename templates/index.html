@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Loan Approval Predictor</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f1f5f9;
+            display: flex;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            width: 400px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px #ccc;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1e3a8a;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 12px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            text-align: center;
+            background: #e0f2fe;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <h1>Loan Approval Predictor</h1>
+
+    <p>Enter applicant details to predict loan approval.</p>
+
+    <form method="POST">
+
+        <label>Credit History</label>
+        <select name="credit_history" required>
+            <option value="Good">Good</option>
+            <option value="Bad">Bad</option>
+        </select>
+
+        <label>Applicant Income</label>
+        <input type="number" name="income"
+               min="0" step="any" value="5000" required>
+
+        <label>Loan Amount (in thousands)</label>
+        <input type="number" name="loan_amount"
+               min="0" step="any" value="130" required>
+
+        <label>Married</label>
+        <select name="married" required>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select>
+
+        <label>Property Area</label>
+        <select name="property_area" required>
+            <option value="Urban">Urban</option>
+            <option value="Semiurban">Semiurban</option>
+            <option value="Rural">Rural</option>
+        </select>
+
+        <button type="submit">Predict</button>
+
+    </form>
+
+    {% if prediction %}
+    <div class="result">
+        <h2>Loan {{ prediction }}</h2>
+        <p>Approval probability: {{ "%.0f"|format(probability * 100) }}%</p>
+    </div>
+    {% endif %}
+
+</div>
+</body>
+</html>
