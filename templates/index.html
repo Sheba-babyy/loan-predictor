@@ -68,31 +68,33 @@
     <form method="POST">
 
         <label>Credit History</label>
-        <select name="credit_history" required>
-            <option value="Good">Good</option>
-            <option value="Bad">Bad</option>
-        </select>
+        <select name="credit_history">
+    <option value="Good" {% if credit_history == "Good" %}selected{% endif %}>Good</option>
+    <option value="Bad" {% if credit_history == "Bad" %}selected{% endif %}>Bad</option>
+</select>
 
         <label>Applicant Income</label>
         <input type="number" name="income"
-               min="0" step="any" value="5000" required>
+       min="0" step="any"
+       value="{{ income }}" required>
 
         <label>Loan Amount (in thousands)</label>
         <input type="number" name="loan_amount"
-               min="0" step="any" value="130" required>
+       min="0" step="any"
+       value="{{ loan_amount }}" required>
 
         <label>Married</label>
-        <select name="married" required>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-        </select>
+        <select name="married">
+    <option value="Yes" {% if married == "Yes" %}selected{% endif %}>Yes</option>
+    <option value="No" {% if married == "No" %}selected{% endif %}>No</option>
+</select>
 
         <label>Property Area</label>
-        <select name="property_area" required>
-            <option value="Urban">Urban</option>
-            <option value="Semiurban">Semiurban</option>
-            <option value="Rural">Rural</option>
-        </select>
+        <select name="property_area">
+    <option value="Urban" {% if property_area == "Urban" %}selected{% endif %}>Urban</option>
+    <option value="Semiurban" {% if property_area == "Semiurban" %}selected{% endif %}>Semiurban</option>
+    <option value="Rural" {% if property_area == "Rural" %}selected{% endif %}>Rural</option>
+</select>
 
         <button type="submit">Predict</button>
 

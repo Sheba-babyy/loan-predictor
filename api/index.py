@@ -34,11 +34,19 @@ cat_cols = [
 ]
 
 
+
 @app.route("/", methods=["GET", "POST"])
 def home():
 
     prediction = None
     probability = None
+
+    # Default values
+    income = 5000
+    loan_amount = 130
+    credit_history = "Good"
+    married = "Yes"
+    property_area = "Urban"
 
     if request.method == "POST":
 
@@ -48,59 +56,39 @@ def home():
         married = request.form["married"]
         property_area = request.form["property_area"]
 
-        # Create input row
         row = pd.DataFrame(
             np.nan, index=[0], columns=columns
         )
 
-        row["Credit_History"] = (
-            1.0 if credit_history == "Good" else 0.0
-        )
-
+        row["Credit_History"] = 1.0 if credit_history == "Good" else 0.0
         row["ApplicantIncome"] = income
         row["LoanAmount"] = loan_amount
+        row["Married"] = 1.0 if married == "Yes" else 0.0
 
-        row["Married"] = (
-            1.0 if married == "Yes" else 0.0
-        )
+        row["Property_Area_Rural"] = 1 if property_area == "Rural" else 0
+        row["Property_Area_Semiurban"] = 1 if property_area == "Semiurban" else 0
+        row["Property_Area_Urban"] = 1 if property_area == "Urban" else 0
 
-        row["Property_Area_Rural"] = (
-            1 if property_area == "Rural" else 0
-        )
-
-        row["Property_Area_Semiurban"] = (
-            1 if property_area == "Semiurban" else 0
-        )
-
-        row["Property_Area_Urban"] = (
-            1 if property_area == "Urban" else 0
-        )
-
-        # Handle missing values
         row[num_cols] = num_imp.transform(row[num_cols])
         row[cat_cols] = cat_imp.transform(row[cat_cols])
-
-        # Scale numerical features
         row[num_cols] = scaler.transform(row[num_cols])
-
-        # Maintain original feature order
         row = row[columns]
 
-        # Predict
         result = model.predict(row)[0]
         probability = model.predict_proba(row)[0][1]
 
-        if result == 1:
-            prediction = "APPROVED"
-        else:
-            prediction = "REJECTED"
+        prediction = "APPROVED" if result == 1 else "REJECTED"
 
     return render_template(
         "index.html",
         prediction=prediction,
-        probability=probability
+        probability=probability,
+        income=income,
+        loan_amount=loan_amount,
+        credit_history=credit_history,
+        married=married,
+        property_area=property_area
     )
-
 
 if __name__ == "__main__":
     app.run(debug=True)
